@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                bat 'dotnet src/4-API test /p:CollectCoverage=true /p:Exclude="[xunit*]*" /p:CoverletOutputFormat="cobertura" /p:CoverletOutput=./coverage/"'
+                bat 'dotnet test src/4-API /p:CollectCoverage=true /p:Exclude="[xunit*]*" /p:CoverletOutputFormat="cobertura" /p:CoverletOutput=./coverage/"'
             }
         }
         stage('Code Coverage Report') {
