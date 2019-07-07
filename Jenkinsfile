@@ -1,14 +1,18 @@
 pipeline {
     agent any
     stages {
-        stage('Git pull package repo') {
+        stage('Git pull package repository') {
             steps {
-                git changelog: false, poll: false, url: 'https://github.com/GrrriiiM/DeOlho.Nuget.git'
+                dir('PackageRepository') {
+                    git changelog: false, poll: false, url: 'https://github.com/GrrriiiM/DeOlho.Nuget.git'
+                }
             }
         }
         stage('Git pull project') {
             steps {
-                git changelog: false, poll: false, url: 'https://github.com/GrrriiiM/DeOlho.ETL.tse_jus_br.git'
+                dir('Project') {
+                    git changelog: false, poll: false, url: 'https://github.com/GrrriiiM/DeOlho.ETL.tse_jus_br.git'
+                }
             }
         }
         
