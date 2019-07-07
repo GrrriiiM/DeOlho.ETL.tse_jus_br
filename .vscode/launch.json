@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/4-API/bin/Debug/netcoreapp2.2/DeOlho.ETL.tse_jus_br.API.dll",
+            "program": "${workspaceFolder}/src/4-API/bin/Debug/netcoreapp2.2/DeOlho.ETL.tse_jus_br.API.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/4-API",
+            "cwd": "${workspaceFolder}/src/4-API",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -21,7 +21,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
+                "/Views": "${workspaceFolder}/src/4-API/Views"
             }
         },
         {

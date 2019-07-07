@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/4-API/DeOlho.ETL.tse_jus_br.API.csproj"
+                "${workspaceFolder}/src/4-API/DeOlho.ETL.tse_jus_br.API.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -17,7 +17,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/4-API/DeOlho.ETL.tse_jus_br.API.csproj"
+                "${workspaceFolder}/src/4-API/DeOlho.ETL.tse_jus_br.API.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -28,7 +28,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/4-API/DeOlho.ETL.tse_jus_br.API.csproj"
+                "${workspaceFolder}/src/4-API/DeOlho.ETL.tse_jus_br.API.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -38,7 +38,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/4-API/DeOlho.ETL.tes_jus_br.Api.csproj"
+                "${workspaceFolder}/src/4-API/DeOlho.ETL.tes_jus_br.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -48,7 +48,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/4-API/DeOlho.ETL.tes_jus_br.Api.csproj"
+                "${workspaceFolder}/src/4-API/DeOlho.ETL.tes_jus_br.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -59,7 +59,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/4-API/DeOlho.ETL.tes_jus_br.Api.csproj"
+                "${workspaceFolder}/src/4-API/DeOlho.ETL.tes_jus_br.Api.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -73,7 +73,7 @@
                 "/p:Exclude=\"[xunit*]*,[DeOlho.ETL.tse_jus_br.UnitTests*]*\"",
                 "/p:CoverletOutputFormat=\"lcov,opencover\"",
                 "/p:CoverletOutput=./coverage/",
-                "${workspaceFolder}/DeOlho.ETL.tse_jus_br.sln"
+                "${workspaceFolder}/src/DeOlho.ETL.tse_jus_br.sln"
             ],
             "problemMatcher": "$msCompile",
             "group": "test"
@@ -85,7 +85,7 @@
             "dependsOn": "Test with coverage",
             "group": "test",
             "options": {
-                "cwd": "${workspaceFolder}/5-UnitTests"
+                "cwd": "${workspaceFolder}/src/5-UnitTests"
             },
             "presentation": {
                 "reveal": "silent",
@@ -98,7 +98,7 @@
             "command": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
             "dependsOn": "Generate coverage report",
             "args": [
-                "${workspaceFolder}/5-UnitTests/coverage/report/index.htm"
+                "${workspaceFolder}/src/5-UnitTests/coverage/report/index.htm"
             ],
             "group": {
                 "kind": "test",
