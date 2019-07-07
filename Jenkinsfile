@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('Pull git package repo') {
+            steps {
+                git changelog: false, poll: false, url: 'https://github.com/GrrriiiM/DeOlho.Nuget.git'
+            }
+        }
         stage('Test') {
             steps {
                 bat 'dotnet test src/4-API /p:CollectCoverage=true /p:Exclude="[xunit*]*" /p:CoverletOutputFormat="cobertura" /p:CoverletOutput=./coverage/"'
