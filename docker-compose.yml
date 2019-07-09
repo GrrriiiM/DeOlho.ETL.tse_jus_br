@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  deolho-etl-tse_jus_br:
+    build: .
+    ports:
+      - "10001:80"
+    env_file:
+      - .env

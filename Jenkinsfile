@@ -1,35 +1,23 @@
-pipeline {
-    agent any
-    stages {
-        stage('Git pull package repository') {
-            steps {
-                dir('PackageRepository') {
-                    git changelog: false, poll: false, url: 'https://github.com/GrrriiiM/DeOlho.Nuget.git'
-                }
-            }
-        }
-        stage('Git pull project') {
-            steps {
-                dir('Project') {
-                    git changelog: false, poll: false, url: 'https://github.com/GrrriiiM/DeOlho.ETL.tse_jus_br.git'
-                }
-            }
-        }
-        
-        stage('Test') {
-            steps {
-                bat 'dotnet test src/4-API /p:CollectCoverage=true /p:Exclude="[xunit*]*" /p:CoverletOutputFormat="cobertura" /p:CoverletOutput=./coverage/"'
-            }
-        }
-        stage('Code Coverage Report') {
-            steps {
-                cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'UnitTest/coverage/coverage.cobertura.xml', conditionalCoverageTargets: '70, 0, 0', lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
+def exec(cmd) {
+    if (Boolean.valueOf(env.UNIX)) {
+        sh cmd
+    }
+    else {
+        bat cmd
+    }
+}
+
+node {
+    stage('Git pull') {
+        checkout scm
+    }
+    stage('Test') {
+        exec('dotnet test src /p:CollectCoverage=true /p:Exclude="[xunit*]*" /p:CoverletOutputFormat="cobertura" /p:CoverletOutput=./coverage/"')
+    }
+    stage('Code Coverage Report') {
+        cobertura autoUpdateHealth: false, autoUpdateStability: false, coberturaReportFile: 'src/5-UnitTests/coverage/coverage.cobertura.xml', conditionalCoverageTargets: '70, 0, 0', lineCoverageTargets: '80, 0, 0', maxNumberOfBuilds: 0, methodCoverageTargets: '80, 0, 0', onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false
+    }
+    stage('Docker-compose up') {
+        exec('docker-compose up -d')
     }
 }
