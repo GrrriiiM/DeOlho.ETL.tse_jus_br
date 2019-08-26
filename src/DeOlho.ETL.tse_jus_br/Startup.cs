@@ -14,6 +14,7 @@ using DeOlho.SeedWork.Infrastructure.Data;
 using DeOlho.SeedWork.Domain.Abstractions;
 using DeOlho.ETL.tse_jus_br.Domain;
 using DeOlho.SeedWork.Infrastructure.Repositories;
+using DeOlho.ETL.tse_jus_br.Application;
 
 namespace DeOlho.ETL.tse_jus_br
 {
@@ -32,6 +33,8 @@ namespace DeOlho.ETL.tse_jus_br
             services.AddSeedWork(new DeOlhoDbContextConfiguration(
                 Configuration.GetConnectionString("DeOlho"),
                 this.GetType().Assembly));
+
+            services.Configure<ETLConfiguration>(options => Configuration.GetSection("ETLConfiguration").Bind(options));
 
             services.AddScoped<IRepository<Politico>, Repository<Politico>>();
 

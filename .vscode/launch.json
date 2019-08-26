@@ -9,9 +9,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/4-API/bin/Debug/netcoreapp2.2/DeOlho.ETL.tse_jus_br.API.dll",
+            "program": "${workspaceFolder}/src/DeOlho.ETL.tse_jus_br/bin/Debug/netcoreapp2.2/DeOlho.ETL.tse_jus_br.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/4-API",
+            "cwd": "${workspaceFolder}/src/DeOlho.ETL.tse_jus_br",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -21,14 +21,8 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/src/4-API/Views"
+                "/Views": "${workspaceFolder}/src/DeOlho.ETL.tse_jus_br/Views"
             }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
         }
     ]
 }

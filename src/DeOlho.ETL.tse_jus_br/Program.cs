@@ -19,6 +19,9 @@ namespace DeOlho.ETL.tse_jus_br
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(c => {
+                    c.AddJsonFile("appsettings.json");
+                })
                 .UseStartup<Startup>();
     }
 }

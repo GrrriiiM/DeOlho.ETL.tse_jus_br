@@ -12,6 +12,7 @@ using DeOlho.ETL.tse_jus_br.Domain;
 using DeOlho.SeedWork.Domain.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace DeOlho.ETL.tse_jus_br.Application.Commands
 {
@@ -26,18 +27,15 @@ namespace DeOlho.ETL.tse_jus_br.Application.Commands
         readonly ETLConfiguration _configuration;
         readonly IRepository<Politico> _politicoRepository;
         readonly IHttpClientFactory _httpClientFactory;
-        readonly IMapper _mapper;
 
         public ExecuteETLPoliticoCommandHandler(
-            ETLConfiguration configuration,
+            IOptions<ETLConfiguration> configuration,
             IRepository<Politico> politicoRepository,
-            IHttpClientFactory httpClientFactory,
-            IMapper mapper)
+            IHttpClientFactory httpClientFactory)
         {
-            _configuration = configuration;
+            _configuration = configuration.Value;
             _politicoRepository = politicoRepository;
             _httpClientFactory = httpClientFactory;
-            _mapper = mapper;
         }
 
         public async Task<Unit> Handle(ExecuteETLPoliticoCommand request, CancellationToken cancellationToken)
@@ -52,6 +50,15 @@ namespace DeOlho.ETL.tse_jus_br.Application.Commands
             var politicosUrl = string.Format(_configuration.PoliticosUrl, anoEleicao);
             var politicosNomeArquivos = _configuration.PoliticosNomeArquivos.Select(_ => string.Format(_, anoEleicao).ToUpper());
 
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Politico, Politico>()
+                    .ForMember(_ => _.Id, _ => _.Ignore());
+            });
+
+            var mapper = config.CreateMapper();
+
+            var politicos = _politicoRepository.Query.ToList().ToDictionary(_ => _.NR_CPF_CANDIDATO);
+
             var result = await new Process()
                 .Extract(() => new HttpStreamSource(_httpClientFactory.CreateClient("deolho"), politicosUrl))
                 .TransformDescompressStream()
@@ -64,24 +71,30 @@ namespace DeOlho.ETL.tse_jus_br.Application.Commands
                 .AsParallel()
                 .WithCancellation(cancellationToken)
                 .WithDegreeOfParallelism(4)
-                .Transform(async _ => {
+                .Transform(_ => {
                     long cpf = Convert.ToInt64(_.Value.NR_CPF_CANDIDATO);
-                    var politico = await _politicoRepository.Query.SingleOrDefaultAsync(p => p.NR_CPF_CANDIDATO == cpf, cancellationToken);
+                    Politico politico = null;
+                    if (politicos.ContainsKey(cpf)) politico = politicos[cpf];
+                    var hasChange = false;
                     if (politico == null)
                     {
-                        politico = new Politico(_.Value, _mapper);
-                        await _politicoRepository.AddAsync(politico, cancellationToken);
+                        politico = new Politico(_.Value, mapper);
+                        politicos.Add(cpf, politico);
+                        _politicoRepository.Add(politico);
+                        hasChange = true;
                     }
                     else
                     {
-                        politico.Update(_.Value, _mapper);
+                        hasChange = politico.Update(_.Value, mapper);
                     }
+
+                    //if (hasChange) _politicoRepository.UnityOfWork.SaveChanges();
+
                     return politico;
                 })
-                .Execute();
-            
-            await _politicoRepository.UnityOfWork.SaveChangesAsync(cancellationToken);
-            
+                .Execute();    
+
+                _politicoRepository.UnityOfWork.SaveChanges();
             
             return new Unit();
         }
