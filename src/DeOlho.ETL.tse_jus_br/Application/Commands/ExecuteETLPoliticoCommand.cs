@@ -27,15 +27,18 @@ namespace DeOlho.ETL.tse_jus_br.Application.Commands
         readonly ETLConfiguration _configuration;
         readonly IRepository<Politico> _politicoRepository;
         readonly IHttpClientFactory _httpClientFactory;
+        readonly PoliticoAutoMapper _politicoAutoMapper;
 
         public ExecuteETLPoliticoCommandHandler(
             IOptions<ETLConfiguration> configuration,
             IRepository<Politico> politicoRepository,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            PoliticoAutoMapper politicoAutoMapper)
         {
             _configuration = configuration.Value;
             _politicoRepository = politicoRepository;
             _httpClientFactory = httpClientFactory;
+            _politicoAutoMapper = politicoAutoMapper;
         }
 
         public async Task<Unit> Handle(ExecuteETLPoliticoCommand request, CancellationToken cancellationToken)
@@ -50,13 +53,6 @@ namespace DeOlho.ETL.tse_jus_br.Application.Commands
             var politicosUrl = string.Format(_configuration.PoliticosUrl, anoEleicao);
             var politicosNomeArquivos = _configuration.PoliticosNomeArquivos.Select(_ => string.Format(_, anoEleicao).ToUpper());
 
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Politico, Politico>()
-                    .ForMember(_ => _.Id, _ => _.Ignore());
-            });
-
-            var mapper = config.CreateMapper();
-
             var politicos = _politicoRepository.Query.ToList().ToDictionary(_ => _.NR_CPF_CANDIDATO);
 
             var result = await new Process()
@@ -68,33 +64,35 @@ namespace DeOlho.ETL.tse_jus_br.Application.Commands
                 .TransformCsvToDynamic(";")
                 .TransformToList(_ => new List<dynamic>(_.Value))
                 //.Where(_ => _.Value.CD_CARGO == "6" && (_.Value.CD_SIT_TOT_TURNO == "2" || _.Value.CD_SIT_TOT_TURNO == "3"))
+                //.Take(10)
                 .AsParallel()
                 .WithCancellation(cancellationToken)
                 .WithDegreeOfParallelism(4)
-                .Transform(_ => {
+                .Transform(async _ => {
                     long cpf = Convert.ToInt64(_.Value.NR_CPF_CANDIDATO);
                     Politico politico = null;
                     if (politicos.ContainsKey(cpf)) politico = politicos[cpf];
                     var hasChange = false;
                     if (politico == null)
                     {
-                        politico = new Politico(_.Value, mapper);
+                        politico = new Politico(_.Value, _politicoAutoMapper);
                         politicos.Add(cpf, politico);
                         _politicoRepository.Add(politico);
                         hasChange = true;
                     }
                     else
                     {
-                        hasChange = politico.Update(_.Value, mapper);
+                        hasChange = politico.Update(_.Value, _politicoAutoMapper);
                     }
 
-                    //if (hasChange) _politicoRepository.UnityOfWork.SaveChanges();
+                    // if (hasChange)
+                    //     await _politicoRepository.UnityOfWork.SaveChangesAsync(cancellationToken);
 
                     return politico;
                 })
-                .Execute();    
+                .Execute();
 
-                _politicoRepository.UnityOfWork.SaveChanges();
+                await _politicoRepository.UnityOfWork.SaveChangesAsync(cancellationToken);
             
             return new Unit();
         }

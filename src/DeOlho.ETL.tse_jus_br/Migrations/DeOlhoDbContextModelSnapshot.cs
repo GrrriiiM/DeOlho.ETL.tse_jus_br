@@ -114,6 +114,8 @@ namespace DeOlho.ETL.tse_jus_br.Migrations
 
                     b.Property<int>("NR_TURNO");
 
+                    b.Property<bool>("Published");
+
                     b.Property<string>("SG_PARTIDO");
 
                     b.Property<string>("SG_UE");

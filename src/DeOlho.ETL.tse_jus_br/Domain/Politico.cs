@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AutoMapper;
 using DeOlho.SeedWork.Domain;
 using DeOlho.SeedWork.Util;
@@ -8,10 +9,12 @@ namespace DeOlho.ETL.tse_jus_br.Domain
     public class Politico : Entity
     {
         private Politico() {}
-        public Politico(dynamic registroImportacao, IMapper mapper)
+        public Politico(dynamic registroImportacao, PoliticoAutoMapper politicoAutoMapper)
         {
-            mapper.Map(registroImportacao, this);
+            politicoAutoMapper.MapFromRegistroImportacao(registroImportacao, this);
         }
+
+        public bool Published { get; set; }
 
         public int ANO_ELEICAO { get; protected set; }
         public int CD_TIPO_ELEICAO { get; protected set; }
@@ -70,12 +73,14 @@ namespace DeOlho.ETL.tse_jus_br.Domain
         public int NR_PROTOCOLO_CANDIDATURA { get; protected set; }
         public long NR_PROCESSO { get; protected set; }
 
-        public bool Update(dynamic registroImportacao, IMapper mapper)
+        public bool Update(dynamic registroImportacao, PoliticoAutoMapper politicoAutoMapper)
         {
-            var politico = (Politico)mapper.Map<Politico>(registroImportacao);
+            var politico = politicoAutoMapper.MapFromRegistroImportacao(registroImportacao);
             var hasChange = !PropertyCompare.Equal(politico, this, nameof(politico.Id));
             if (hasChange)
-                mapper.Map(registroImportacao, this);
+            {
+                politicoAutoMapper.MapFromRegistroImportacao(politico, this);
+            }
 
             return hasChange;
         }

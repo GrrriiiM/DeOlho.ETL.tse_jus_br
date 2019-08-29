@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.ETL.tse_jus_br", "DeOlho.ETL.tse_jus_br\DeOlho.ETL.tse_jus_br.csproj", "{813709BE-1454-46EA-A42F-78E3AFDA3ED3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeOlho.ETL.tse_jus_br.Messages", "DeOlho.ETL.tse_jus_br.Messages\DeOlho.ETL.tse_jus_br.Messages.csproj", "{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{813709BE-1454-46EA-A42F-78E3AFDA3ED3}.Release|x64.Build.0 = Release|Any CPU
 		{813709BE-1454-46EA-A42F-78E3AFDA3ED3}.Release|x86.ActiveCfg = Release|Any CPU
 		{813709BE-1454-46EA-A42F-78E3AFDA3ED3}.Release|x86.Build.0 = Release|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Debug|x64.Build.0 = Debug|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Debug|x86.Build.0 = Debug|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Release|x64.ActiveCfg = Release|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Release|x64.Build.0 = Release|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2B8F1D6-51F0-4487-86EA-E8FEBD69DD03}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

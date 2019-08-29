@@ -11,8 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DeOlho.ETL.tse_jus_br.Messages\DeOlho.ETL.tse_jus_br.Messages.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\DeOlho.SeedWork\src\DeOlho.SeedWork\DeOlho.SeedWork.csproj" />
     <ProjectReference Include="..\..\..\DeOlho.ETL\src\ETL\DeOlho.ETL.csproj" />
+    <ProjectReference Include="..\..\..\DeOlho.EventBus\src\DeOlho.EventBus.RabbitMQ.DependencyInjection\DeOlho.EventBus.RabbitMQ.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>

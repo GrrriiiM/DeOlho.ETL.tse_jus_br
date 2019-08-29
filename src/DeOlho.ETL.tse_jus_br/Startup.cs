@@ -15,6 +15,8 @@ using DeOlho.SeedWork.Domain.Abstractions;
 using DeOlho.ETL.tse_jus_br.Domain;
 using DeOlho.SeedWork.Infrastructure.Repositories;
 using DeOlho.ETL.tse_jus_br.Application;
+using DeOlho.EventBus.RabbitMQ;
+using DeOlho.EventBus;
 
 namespace DeOlho.ETL.tse_jus_br
 {
@@ -32,13 +34,23 @@ namespace DeOlho.ETL.tse_jus_br
         {
             services.AddSeedWork(new DeOlhoDbContextConfiguration(
                 Configuration.GetConnectionString("DeOlho"),
+                this.GetType().Assembly,
                 this.GetType().Assembly));
 
             services.Configure<ETLConfiguration>(options => Configuration.GetSection("ETLConfiguration").Bind(options));
 
             services.AddScoped<IRepository<Politico>, Repository<Politico>>();
 
+            services.AddScoped<PoliticoAutoMapper>();
+
+            services.AddEventBusRabbitMQ(c => 
+            {
+                c.Configuration(Configuration.GetSection("EventBus"));
+            });
+
             services.AddMediatR(Assembly.GetEntryAssembly());
+
+            services.AddHostedService<IntegrationEventBackgroundService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

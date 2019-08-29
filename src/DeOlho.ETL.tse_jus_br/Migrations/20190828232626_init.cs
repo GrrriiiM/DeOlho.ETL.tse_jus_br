@@ -14,6 +14,7 @@ namespace DeOlho.ETL.tse_jus_br.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Published = table.Column<bool>(nullable: false),
                     ANO_ELEICAO = table.Column<int>(nullable: false),
                     CD_TIPO_ELEICAO = table.Column<int>(nullable: false),
                     NM_TIPO_ELEICAO = table.Column<string>(nullable: true),

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeOlho.ETL.tse_jus_br.Migrations
 {
     [DbContext(typeof(DeOlhoDbContext))]
-    [Migration("20190826001834_init")]
+    [Migration("20190828232626_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,6 +115,8 @@ namespace DeOlho.ETL.tse_jus_br.Migrations
                     b.Property<long>("NR_TITULO_ELEITORAL_CANDIDATO");
 
                     b.Property<int>("NR_TURNO");
+
+                    b.Property<bool>("Published");
 
                     b.Property<string>("SG_PARTIDO");
 
