@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeOlho.ETL.tse_jus_br.Migrations
 {
     [DbContext(typeof(DeOlhoDbContext))]
-    [Migration("20190828232626_init")]
+    [Migration("20190901215511_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,6 +80,10 @@ namespace DeOlho.ETL.tse_jus_br.Migrations
 
                     b.Property<DateTime>("DT_NASCIMENTO");
 
+                    b.Property<string>("DescricaoErro");
+
+                    b.Property<bool>("Erro");
+
                     b.Property<string>("NM_CANDIDATO");
 
                     b.Property<string>("NM_COLIGACAO");
@@ -116,7 +120,7 @@ namespace DeOlho.ETL.tse_jus_br.Migrations
 
                     b.Property<int>("NR_TURNO");
 
-                    b.Property<bool>("Published");
+                    b.Property<bool>("Publicado");
 
                     b.Property<string>("SG_PARTIDO");
 

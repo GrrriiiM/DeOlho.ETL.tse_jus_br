@@ -11,7 +11,7 @@ namespace DeOlho.ETL.tse_jus_br.Domain
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Politico, Politico>()
                     .ForMember(_ => _.Id, _ => _.Ignore());
-                cfg.CreateMap<Politico, PoliticoChangedMessage>();
+                cfg.CreateMap<Politico, PoliticoChangedMessage.Politico>();
             });
             _mapper = config.CreateMapper();
         }
@@ -31,7 +31,7 @@ namespace DeOlho.ETL.tse_jus_br.Domain
             return _mapper.Map(politicoEntrada, politicoSaida);
         }
 
-        public PoliticoChangedMessage MapToChangedMessage(Politico politico, PoliticoChangedMessage politicoChangedMessage)
+        public PoliticoChangedMessage.Politico MapToChangedMessage(Politico politico, PoliticoChangedMessage.Politico politicoChangedMessage)
         {
             return _mapper.Map(politico, politicoChangedMessage);
         }

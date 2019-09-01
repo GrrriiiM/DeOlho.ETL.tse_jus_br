@@ -14,7 +14,10 @@ namespace DeOlho.ETL.tse_jus_br.Domain
             politicoAutoMapper.MapFromRegistroImportacao(registroImportacao, this);
         }
 
-        public bool Published { get; set; }
+        public bool Publicado { get; set; }
+
+        public bool Erro { get; set; }
+        public string DescricaoErro { get; set; }
 
         public int ANO_ELEICAO { get; protected set; }
         public int CD_TIPO_ELEICAO { get; protected set; }

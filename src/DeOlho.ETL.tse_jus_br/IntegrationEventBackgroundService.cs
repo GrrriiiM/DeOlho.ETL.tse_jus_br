@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,27 +29,34 @@ namespace DeOlho.ETL.tse_jus_br
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            using(var scope = _serviceProvider.CreateScope())
-            {
-                _deOlhoDbContext = scope.ServiceProvider.GetService<DeOlhoDbContext>();
-                _politicoAutoMapper = scope.ServiceProvider.GetService<PoliticoAutoMapper>();
                 
-                while(!stoppingToken.IsCancellationRequested)
+            while(!stoppingToken.IsCancellationRequested)
+            {
+                using(var scope = _serviceProvider.CreateScope())
                 {
-                    foreach(var politico in _deOlhoDbContext.Set<Politico>().Where(_ => !_.Published).Take(1000).ToList())
+                    _deOlhoDbContext = scope.ServiceProvider.GetService<DeOlhoDbContext>();
+                    _politicoAutoMapper = scope.ServiceProvider.GetService<PoliticoAutoMapper>();
+                
+                    var messagePoliticos = new List<PoliticoChangedMessage.Politico>();
+                    foreach(var politico in _deOlhoDbContext.Set<Politico>().Where(_ => !_.Publicado).Take(1000).ToList())
                     {
-                        var message  =  new PoliticoChangedMessage(Guid.NewGuid().ToString());
+                        var messagePolitico = new PoliticoChangedMessage.Politico();
+                        _politicoAutoMapper.MapToChangedMessage(politico, messagePolitico);
 
-                        _politicoAutoMapper.MapToChangedMessage(politico, message);
+                        politico.Publicado = true;
+                        politico.Erro = false;
+                        politico.DescricaoErro = null;
 
-                        _eventBus.Publish<PoliticoChangedMessage>(message);
+                        messagePoliticos.Add(messagePolitico);
+                    }
 
-                        politico.Published = true;
-
+                    if (messagePoliticos.Any())
+                    {
+                        _eventBus.Publish<PoliticoChangedMessage>(new PoliticoChangedMessage(Guid.NewGuid().ToString(), messagePoliticos));
                         await _deOlhoDbContext.SaveChangesAsync(stoppingToken);
                     }
-                    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
                 }
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
         }
     }

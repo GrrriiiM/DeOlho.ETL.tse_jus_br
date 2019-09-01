@@ -20,6 +20,7 @@ using DeOlho.EventBus;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
+using DeOlho.ETL.tse_jus_br.Infrastructure.HealthCheckers;
 
 namespace DeOlho.ETL.tse_jus_br
 {
@@ -54,27 +55,7 @@ namespace DeOlho.ETL.tse_jus_br
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public class EventLogHealthCheck : IHealthCheck
-        {
-            readonly IRepository<Politico> _politicoRepository;
-
-            public EventLogHealthCheck(
-                IRepository<Politico> politicoRepository)
-            {
-                _politicoRepository = politicoRepository;
-            }
-            public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
-            {
-                if (await _politicoRepository.Query.AnyAsync(_ => !_.Published, cancellationToken))
-                {
-                    return HealthCheckResult.Degraded();
-                }
-                else
-                {
-                    return HealthCheckResult.Healthy();
-                }
-            }
-        }
+        
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
